@@ -1,5 +1,5 @@
 FROM node:alpine
-COPY . /app
 WORKDIR /app
+COPY . /app
 RUN npm install
-CMD node server.js
+CMD node app/server.js
