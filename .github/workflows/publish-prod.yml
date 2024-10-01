@@ -2,7 +2,7 @@ name: publish-prod
 on: 
   push:
     branches:
-      - 'master'
+      - 'main'
 
 jobs:
   publish-hello-docker-image:
