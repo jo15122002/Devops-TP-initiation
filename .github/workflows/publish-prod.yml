@@ -1,5 +1,8 @@
 name: publish
-on: [push]
+on: 
+  push:
+    branches:
+      - 'master'
 
 jobs:
   publish-hello-docker-image:
@@ -16,5 +19,5 @@ jobs:
 
       - name: Build the hello-docker Docker image
         run: |
-          docker build . --tag ghcr.io/jo15122002/hello-docker-gcr-demo:staging
-          docker push ghcr.io/jo15122002/hello-docker-gcr-demo:staging
+          docker build . --tag ghcr.io/jo15122002/hello-docker-gcr-demo:production
+          docker push ghcr.io/jo15122002/hello-docker-gcr-demo:production
