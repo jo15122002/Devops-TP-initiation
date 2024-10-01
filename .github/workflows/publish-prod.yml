@@ -1,4 +1,4 @@
-name: publish
+name: publish-prod
 on: 
   push:
     branches:
