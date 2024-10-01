@@ -1,12 +1,15 @@
-const got = require('got');
-const querystring = require('querystring');
-const jsonpHelper = require('../app/jsonp_helper');
+import * as querystring from 'querystring';
+import fetch from 'node-fetch';
 
 class API {
   constructor({ tags = '', tagmode = '', format = 'json' }) {
     const qs = querystring.stringify({ tags, tagmode, format });
     this.hostname = 'api.flickr.com';
-    this.path = `/services/feeds/photos_public.gne?${qs}`;
+    this.path = `/services/feeds/photos_public.gne?nojsoncallback=1&${qs}`;
+  }
+
+  gen () {
+    return 'https://' + this.hostname + this.path
   }
 }
 
@@ -17,10 +20,10 @@ describe('flickr public feed api', () => {
       tagmode: 'all'
     });
 
-    return got(apiTest).then(response => {
-      expect(response.statusCode).toBe(200);
+    return fetch(apiTest.gen()).then(async response => {
+      expect(response.status).toBe(200);
 
-      const photoFeed = jsonpHelper.parseJSONP(response.body);
+      const photoFeed = JSON.parse(await response.text());
       expect(photoFeed).toHaveProperty('items');
 
       const photos = photoFeed.items;
@@ -50,10 +53,10 @@ describe('flickr public feed api', () => {
       tagmode: 'any'
     });
 
-    return got(apiTest).then(response => {
-      expect(response.statusCode).toBe(200);
+    return fetch(apiTest.gen()).then(async response => {
+      expect(response.status).toBe(200);
 
-      const photoFeed = jsonpHelper.parseJSONP(response.body);
+      const photoFeed = JSON.parse(await response.text());
       expect(photoFeed).toHaveProperty('items');
 
       const photos = photoFeed.items;
@@ -68,10 +71,10 @@ describe('flickr public feed api', () => {
       tagmode: 'all'
     });
 
-    return got(apiTest).then(response => {
-      expect(response.statusCode).toBe(200);
+    return fetch(apiTest.gen()).then(async response => {
+      expect(response.status).toBe(200);
 
-      const photoFeed = jsonpHelper.parseJSONP(response.body);
+      const photoFeed = JSON.parse(await response.text());
       expect(photoFeed).toHaveProperty('items');
 
       const photos = photoFeed.items;

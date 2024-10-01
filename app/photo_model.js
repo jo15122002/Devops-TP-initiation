@@ -1,20 +1,13 @@
-const got = require('got');
-const querystring = require('querystring');
-const jsonpHelper = require('./jsonp_helper');
+import querystring from 'querystring';
+import fetch from 'node-fetch';
 
-function getFlickrPhotos(tags, tagmode) {
+async function getFlickrPhotos(tags, tagmode) {
   const qs = querystring.stringify({ tags, tagmode, format: 'json' });
 
-  const options = {
-    protocol: 'https:',
-    hostname: 'api.flickr.com',
-    path: `/services/feeds/photos_public.gne?${qs}`,
-    timeout: 10000
-  };
+  const response = await fetch(`https://api.flickr.com//services/feeds/photos_public.gne?nojsoncallback=1&${qs}`);
+  const data = await response.json();
 
-  return got(options).then(response => {
-    const photoFeed = jsonpHelper.parseJSONP(response.body);
-
+  return Promise.resolve(data).then(photoFeed => {
     photoFeed.items.forEach(photo => {
       photo.media.t = photo.media.m.split('m.jpg')[0] + 't.jpg';
       photo.media.b = photo.media.m.split('m.jpg')[0] + 'b.jpg';
@@ -24,6 +17,6 @@ function getFlickrPhotos(tags, tagmode) {
   });
 }
 
-module.exports = {
+export {
   getFlickrPhotos
 };

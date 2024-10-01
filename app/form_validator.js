@@ -12,7 +12,7 @@ function hasValidFlickrAPIParams(tags, tagmode) {
   return isValidCommaDelimitedList(tags) && isValidTagmode(tagmode);
 }
 
-module.exports = {
+export {
   isValidCommaDelimitedList,
   isValidTagmode,
   hasValidFlickrAPIParams

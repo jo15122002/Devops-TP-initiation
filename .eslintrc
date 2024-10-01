@@ -6,7 +6,8 @@
     "commonjs": true
   },
   "parserOptions": {
-    "ecmaVersion": 6
+    "sourceType": "module",
+    "ecmaVersion": 2020
   },
   "globals": {
     "jest": false,

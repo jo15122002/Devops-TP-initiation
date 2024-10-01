@@ -1,5 +1,5 @@
-const formValidator = require('./form_validator');
-const photoModel = require('./photo_model');
+import * as formValidator from './form_validator.js';
+import * as photoModel from './photo_model.js';
 
 function route(app) {
   app.get('/', (req, res) => {
@@ -39,4 +39,4 @@ function route(app) {
   });
 }
 
-module.exports = route;
+export {route};

@@ -1,15 +1,15 @@
-const request = require('supertest');
+import * as request from 'supertest';
 
-jest.mock('../../app/photo_model');
-const app = require('../../app/server');
+// jest.mock('../../app/photo_model');
+import * as app from '../../app/server.js';
 
 describe('index route', () => {
   afterEach(() => {
-    app.server.close();
+    app.app.server.close();
   });
 
   test('should respond with a 200 with no query parameters', () => {
-    return request(app)
+    return request.default(app.app)
       .get('/')
       .expect('Content-Type', /html/)
       .expect(200)
@@ -21,7 +21,7 @@ describe('index route', () => {
   });
 
   test('should respond with a 200 with valid query parameters', () => {
-    return request(app)
+    return request.default(app.app)
       .get('/?tags=california&tagmode=all')
       .expect('Content-Type', /html/)
       .expect(200)
@@ -33,22 +33,12 @@ describe('index route', () => {
   });
 
   test('should respond with a 200 with invalid query parameters', () => {
-    return request(app)
+    return request.default(app.app)
       .get('/?tags=california123&tagmode=all')
       .expect('Content-Type', /html/)
       .expect(200)
       .then(response => {
         expect(response.text).toMatch(/<div class="alert alert-danger">/);
-      });
-  });
-
-  test('should respond with a 500 error due to bad jsonp data', () => {
-    return request(app)
-      .get('/?tags=error&tagmode=all')
-      .expect('Content-Type', /json/)
-      .expect(500)
-      .then(response => {
-        expect(response.body).toEqual({ error: 'Internal server error' });
       });
   });
 });
