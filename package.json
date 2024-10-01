@@ -39,5 +39,8 @@
   "prettier": {
     "singleQuote": true
   },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com/"
+  },
   "type": "module"
 }
