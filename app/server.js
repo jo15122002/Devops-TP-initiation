@@ -1,8 +1,10 @@
-import express from 'express';
-import favicon from 'serve-favicon';
-import path from 'path';
-import { fileURLToPath } from 'url';
+import 'dotenv/config';
 import ejs from 'ejs';
+import express from 'express';
+import path from 'path';
+import favicon from 'serve-favicon';
+import { fileURLToPath } from 'url';
+import './worker.js';
 
 const app = express();
 const __filename = fileURLToPath(import.meta.url); // get the resolved path to the file
@@ -27,6 +29,6 @@ const port = process.env.PORT || 3000;
 app.server = app.listen(port);
 console.log(`listening on port ${port}`);
 
-export {app};
+export { app };
 
 //coucou

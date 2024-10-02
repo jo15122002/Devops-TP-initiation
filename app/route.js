@@ -1,6 +1,13 @@
 import * as formValidator from './form_validator.js';
 import * as photoModel from './photo_model.js';
 
+import * as googleSub from './pubsub.js';
+
+import fs from "fs";
+
+const keyFilename = process.env.GOOGLE_APPLICATION_CREDENTIALS;
+const env = JSON.parse(fs.readFileSync(keyFilename));
+
 function route(app) {
   app.get('/', (req, res) => {
     const tags = req.query.tags;
@@ -37,6 +44,16 @@ function route(app) {
         return res.status(500).send({ error });
       });
   });
+
+  app.post('/zip', async (req, res) => {
+    const urlsTags = req.query.tags;
+
+    //call quickstart function
+    await googleSub.quickstart(urlsTags, env.project_id, process.env.TOPIC_SUBSCRIPTION, process.env.TOPIC_SUBSCRIPTION);
+
+    return res.status(200).send({ message: 'Processing your request' });
+  });
 }
 
-export {route};
+export { route };
+
