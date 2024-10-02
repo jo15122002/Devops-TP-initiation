@@ -31,3 +31,5 @@ A new code coverage report is generated every time `npm test` runs.
 Normally this coverage report is ignored by git.
 This project includes it in source control so the coverage report can be viewed in the demo app:
 [http://express-app-testing-demo.herokuapp.com/coverage/lcov-report/index.html](http://express-app-testing-demo.herokuapp.com/coverage/lcov-report/index.html)
+
+[![Coverage Status](https://coveralls.io/repos/github/jo15122002/Devops-TP-initiation/badge.svg)](https://coveralls.io/github/jo15122002/Devops-TP-initiation)

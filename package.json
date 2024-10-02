@@ -13,15 +13,21 @@
     "test:e2e": "node --experimental-vm-modules ./node_modules/.bin/jest --runInBand e2e_tests/*.test.js",
     "jest": "node --experimental-vm-modules ./node_modules/.bin/jest --coverage app/__tests__/*.test.js",
     "lint": "eslint app e2e_tests",
-    "prettier": "prettier --write app/*.js app/__{tests,mocks}__/*.js e2e_tests/*.js"
+    "prettier": "prettier --write app/*.js app/__{tests,mocks}__/*.js e2e_tests/*.js",
+    "test-coverage": "jest --coverage"
   },
   "dependencies": {
+    "@google-cloud/pubsub": "^4.7.2",
+    "@google-cloud/storage": "^7.13.0",
+    "dotenv": "^16.4.5",
     "ejs": "^3.1.8",
     "express": "^4.21.0",
     "node-fetch": "^3.3.2",
-    "serve-favicon": "^2.4.5"
+    "serve-favicon": "^2.4.5",
+    "zip-stream": "^6.0.1"
   },
   "devDependencies": {
+    "coveralls": "^3.1.1",
     "eslint": "^8.24.0",
     "jest": "^29.1.2",
     "nodemon": "^3.1.7",
