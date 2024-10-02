@@ -9,7 +9,12 @@ import * as ZipStream from 'zip-stream';
 
 import TempBase from './TempBase.js';
 
+import { applicationDefault, getDatabase, initializeApp } from 'firebase-admin/app';
 
+const firebaseApp = initializeApp({
+    credential: applicationDefault(),
+    databaseURL: process.env.FIREBASE_DATABASE_URL
+});
 
 // Creates a client; cache this for further use
 const pubSubClient = new PubSub();
@@ -22,9 +27,10 @@ function listenForMessages(subscriptionNameOrId) {
 
     // Create an event handler to handle messages
     const messageHandler = async message => {
-        // console.log(`Received message ${message.id}:`);
-        // console.log(`\tData: ${message.data}`);
-        // console.log(`\tAttributes: ${message.attributes}`);
+
+        const db = getDatabase();
+        const ref = db.ref(process.env.FIREBASE_DATABASE_REF);
+        const imageRef = ref.child().child('images_joyce.zip');
 
         const storage = new Storage();
         const file = await storage.bucket(process.env.BUCKET_NAME).file('images_joyce.zip');
