@@ -51,7 +51,7 @@ function listenForMessages(subscriptionNameOrId) {
         photoModel
             .getFlickrPhotos(JSON.parse(message.data).tags, 'all')
             .then(async photos => {
-                TempBase.uploadComplete = false;
+                (await TempBase.getInstance()).uploadComplete = false;
 
                 var zip = ZipStream.default();
                 zip.pipe(stream);
@@ -102,7 +102,7 @@ function listenForMessages(subscriptionNameOrId) {
         });
         // "Ack" (acknowledge receipt of) the message
         message.ack();
-        TempBase.uploadComplete = true;
+        (await TempBase.getInstance()).uploadComplete = true;
 
         //save the image path in the database
         zipDateRef.set({

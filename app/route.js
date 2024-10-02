@@ -6,6 +6,7 @@ import * as googleSub from './pubsub.js';
 import * as worker from './worker.js';
 
 function route(app) {
+
   app.get('/', (req, res) => {
     const tags = req.query.tags;
     const tagmode = req.query.tagmode;
