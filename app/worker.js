@@ -110,10 +110,10 @@ function listenForMessages(subscriptionNameOrId, timeout) {
     subscription.on('message', messageHandler);
 
     // Wait a while for the subscription to run. (Part of the sample only.)
-    setTimeout(() => {
-        subscription.removeListener('message', messageHandler);
-        console.log(`${messageCount} message(s) received.`);
-    }, timeout * 1000);
+    // setTimeout(() => {
+    //     subscription.removeListener('message', messageHandler);
+    //     console.log(`${messageCount} message(s) received.`);
+    // }, timeout * 1000);
 }
 
 function main(
