@@ -14,18 +14,16 @@ import TempBase from './TempBase.js';
 // Creates a client; cache this for further use
 const pubSubClient = new PubSub();
 
-function listenForMessages(subscriptionNameOrId, timeout) {
+function listenForMessages(subscriptionNameOrId) {
     // References an existing subscription; if you are unsure if the
     // subscription will exist, try the optimisticSubscribe sample.
     const subscription = pubSubClient.subscription(subscriptionNameOrId);
 
     // Create an event handler to handle messages
-    let messageCount = 0;
     const messageHandler = async message => {
         // console.log(`Received message ${message.id}:`);
         // console.log(`\tData: ${message.data}`);
         // console.log(`\tAttributes: ${message.attributes}`);
-        messageCount += 1;
 
         const storage = new Storage();
         const file = await storage.bucket(process.env.BUCKET_NAME).file('images_joyce.zip');
@@ -117,11 +115,9 @@ function listenForMessages(subscriptionNameOrId, timeout) {
 }
 
 function main(
-    subscriptionNameOrId = process.env.TOPIC_SUBSCRIPTION,
-    timeout = 60
+    subscriptionNameOrId = process.env.TOPIC_SUBSCRIPTION
 ) {
-    timeout = Number(timeout);
-    listenForMessages(subscriptionNameOrId, timeout);
+    listenForMessages(subscriptionNameOrId);
 }
 
 main();
