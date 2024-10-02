@@ -9,15 +9,16 @@ import * as ZipStream from 'zip-stream';
 
 import TempBase from './TempBase.js';
 
-import { applicationDefault, getDatabase, initializeApp } from 'firebase-admin/app';
+import { applicationDefault, initializeApp } from 'firebase-admin/app';
+import { getDatabase } from 'firebase-admin/database';
+
+// Creates a client; cache this for further use
+const pubSubClient = new PubSub();
 
 const firebaseApp = initializeApp({
     credential: applicationDefault(),
     databaseURL: process.env.FIREBASE_DATABASE_URL
 });
-
-// Creates a client; cache this for further use
-const pubSubClient = new PubSub();
 
 function listenForMessages(subscriptionNameOrId) {
     console.log(`Listening for messages on ${subscriptionNameOrId}`);
@@ -27,13 +28,14 @@ function listenForMessages(subscriptionNameOrId) {
 
     // Create an event handler to handle messages
     const messageHandler = async message => {
+        const zipDate = Date.now();
 
         const db = getDatabase();
         const ref = db.ref(process.env.FIREBASE_DATABASE_REF);
-        const imageRef = ref.child().child('images_joyce.zip');
+        const zipDateRef = ref.child(zipDate);
 
         const storage = new Storage();
-        const file = await storage.bucket(process.env.BUCKET_NAME).file('images_joyce.zip');
+        const file = await storage.bucket(process.env.BUCKET_NAME).file('images_joyce' + zipDate + '.zip');
         const stream = file.createWriteStream({
             metadata: {
                 contentType: 'application/zip',
@@ -102,6 +104,11 @@ function listenForMessages(subscriptionNameOrId) {
         message.ack();
         TempBase.uploadComplete = true;
 
+        //save the image path in the database
+        zipDateRef.set({
+            path: 'images_joyce' + zipDate + '.zip',
+            tags: JSON.parse(message.data).tags
+        });
 
         const options = {
             action: 'read',
@@ -121,6 +128,15 @@ function listenForMessages(subscriptionNameOrId) {
     // }, timeout * 1000);
 }
 
+function getUrl(path) {
+    const storage = new Storage();
+    const options = {
+        action: 'read',
+        expires: Date.now() + 1000 * 60 * 60 // 1 hour
+    };
+    return storage.bucket(process.env.BUCKET_NAME).file(path).getSignedUrl(options);
+}
+
 function main(
     subscriptionNameOrId = process.env.TOPIC_SUBSCRIPTION
 ) {
@@ -129,3 +145,6 @@ function main(
 }
 
 main();
+
+export { getUrl };
+

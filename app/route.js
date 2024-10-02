@@ -3,6 +3,8 @@ import * as photoModel from './photo_model.js';
 
 import * as googleSub from './pubsub.js';
 
+import * as worker from './worker.js';
+
 function route(app) {
   app.get('/', (req, res) => {
     const tags = req.query.tags;
@@ -47,6 +49,26 @@ function route(app) {
     await googleSub.quickstart(urlsTags, "dmii-2024", process.env.TOPIC_SUBSCRIPTION, process.env.TOPIC_SUBSCRIPTION);
 
     return res.status(200).send({ message: 'Processing your request' });
+  });
+
+  app.get('/browse', (req, res) => {
+    return res.render('browse');
+  });
+
+  app.get('/getUrl', (req, res) => {
+    const path = req.query.path;
+    if (!path) {
+      return res.status(400).send({ error: 'Path parameter is required' });
+    }
+
+    return worker
+      .getUrl(path)
+      .then(url => {
+        return res.status(200).send({ url });
+      })
+      .catch(error => {
+        return res.status(500).send({ error });
+      });
   });
 }
 
