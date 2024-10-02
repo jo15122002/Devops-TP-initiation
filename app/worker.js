@@ -9,6 +9,8 @@ import * as ZipStream from 'zip-stream';
 
 import TempBase from './TempBase.js';
 
+
+
 // Creates a client; cache this for further use
 const pubSubClient = new PubSub();
 
@@ -24,11 +26,6 @@ function listenForMessages(subscriptionNameOrId, timeout) {
         // console.log(`\tData: ${message.data}`);
         // console.log(`\tAttributes: ${message.attributes}`);
         messageCount += 1;
-
-        const options = {
-            action: 'read',
-            expires: Date.now() + 1000 * 60 * 60 // 1 hour
-        };
 
         const storage = new Storage();
         const file = await storage.bucket(process.env.BUCKET_NAME).file('images_joyce.zip');
@@ -71,7 +68,7 @@ function listenForMessages(subscriptionNameOrId, timeout) {
                     //console.log("file : " + JSON.stringify(file?.url?.media?.b));
                     const arrayBuffer = await (await fetch(file.url.media.b)).arrayBuffer();
                     const buffer = Buffer.from(arrayBuffer);
-                    zip.entry(buffer, { name: file.name }, function (err, entry) {
+                    zip.entry(buffer, { name: file.name }, function (err) {
 
                         if (err) {
                             console.error(err);
@@ -100,6 +97,11 @@ function listenForMessages(subscriptionNameOrId, timeout) {
         message.ack();
         TempBase.uploadComplete = true;
 
+
+        const options = {
+            action: 'read',
+            expires: Date.now() + 1000 * 60 * 60 // 1 hour
+        };
         const signedUrls = await storage.bucket(process.env.BUCKET_NAME).file('images_joyce.zip').getSignedUrl(options);
         console.log(`Signed URL: ${signedUrls[0]}`);
     };

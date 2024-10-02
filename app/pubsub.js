@@ -4,8 +4,7 @@ import { PubSub } from "@google-cloud/pubsub";
 async function quickstart(
     tags,
     projectId, // Your Google Cloud Platform project ID
-    topicNameOrId, // Name for the new topic to create
-    subscriptionName, // Name for the new subscription to create
+    topicNameOrId // Name for the new topic to create
 ) {
     // Instantiates a client
     const pubsub = new PubSub({ projectId });
