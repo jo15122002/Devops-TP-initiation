@@ -15,6 +15,7 @@ import TempBase from './TempBase.js';
 const pubSubClient = new PubSub();
 
 function listenForMessages(subscriptionNameOrId) {
+    console.log(`Listening for messages on ${subscriptionNameOrId}`);
     // References an existing subscription; if you are unsure if the
     // subscription will exist, try the optimisticSubscribe sample.
     const subscription = pubSubClient.subscription(subscriptionNameOrId);
@@ -117,6 +118,7 @@ function listenForMessages(subscriptionNameOrId) {
 function main(
     subscriptionNameOrId = process.env.TOPIC_SUBSCRIPTION
 ) {
+    console.log("main");
     listenForMessages(subscriptionNameOrId);
 }
 

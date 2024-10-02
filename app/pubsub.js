@@ -15,7 +15,9 @@ async function quickstart(
 
 
     // Send a message to the topic
+    console.log(`Sending message to topic`);
     await topic.publishMessage({ data: Buffer.from(JSON.stringify({ 'tags': tags, })) });
+    console.log(`Message published.`);
 }
 
 export { quickstart };
